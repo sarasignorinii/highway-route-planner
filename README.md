@@ -4,22 +4,21 @@
 
 # highway-route-planner
 
-*Pianifica il percorso con meno tappe lungo un'autostrada di stazioni di ricarica.*
+*Pianifica il percorso con meno tappe lungo un'autostrada di stazioni di servizio.*
 
-![Linguaggio: C](https://img.shields.io/badge/linguaggio-C-0080ff?style=flat)
 ![Standard: gnu11](https://img.shields.io/badge/standard-gnu11-0080ff?style=flat)
-![Build: make](https://img.shields.io/badge/build-make-0080ff?style=flat)
 ![Licenza: MIT](https://img.shields.io/badge/licenza-MIT-green?style=flat)
 
 </div>
 
-Prova finale di Algoritmi e Principi dell'Informatica, anno accademico 2022–2023.
-C standard, un unico file, nessuna libreria esterna.
+Prova finale di Algoritmi e Strutture Dati, anno accademico 2022–2023.
+C, un unico file, nessuna libreria esterna.
 Specifica completa in [`specifica.pdf`](specifica.pdf).
 
 ## Indice
 
 - [Il problema](#il-problema)
+- [Compilazione](#compilazione)
 - [Comandi](#comandi)
 - [Scelte implementative](#scelte-implementative)
 - [Verifica in locale](#verifica-in-locale)
@@ -36,6 +35,8 @@ veicolo noleggiato. Il programma legge da standard input una sequenza di comandi
 che modificano stazioni e veicoli, e per ogni richiesta pianifica il percorso con
 il minor numero di tappe. A parità di tappe vince il percorso che predilige le
 stazioni più vicine all'inizio dell'autostrada.
+
+## Compilazione
 
 Compila senza warning con le stesse opzioni usate dal verificatore ufficiale.
 
@@ -125,10 +126,10 @@ n = stazioni sull'autostrada, k = stazioni fra partenza e arrivo, m ≤ 512 auto
 | `aggiungi-auto`, `rottama-auto` | O(log n + m) |
 | `pianifica-percorso` | O(k), più O(n) per rigenerare la sintesi dopo una modifica alle stazioni |
 
----
-
-[Torna su](#top)
-
 La sintesi si rigenera per intero dopo ogni aggiunta o demolizione di una
 stazione: renderla incrementale conviene solo se le modifiche alle stazioni si
 alternano fittamente alle pianificazioni.
+
+---
+
+[Torna su](#top)
