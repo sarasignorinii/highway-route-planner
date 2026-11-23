@@ -1,2 +1,9 @@
+test_gen_2023/
+docs/
+tests/
+
 autostrada
 output.txt
+
+*.dSYM
+.DS_Store
