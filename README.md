@@ -17,8 +17,8 @@ stazioni più vicine all'inizio dell'autostrada.
 Compila senza warning con le stesse opzioni usate dal verificatore ufficiale:
 
 ```sh
-gcc -Wall -Werror -std=gnu11 -O2 -lm autostrada.c -o autostrada
-./autostrada < input.txt > output.txt
+gcc -Wall -Werror -std=gnu11 -O2 -lm highway.c -o highway
+./highway < input.txt > output.txt
 ```
 
 ## Comandi
@@ -70,7 +70,7 @@ scritto a mano.
 Per confrontare l'output del programma con quello atteso di un caso di test:
 
 ```sh
-./autostrada < caso.txt > risultato.txt
+./highway < caso.txt > risultato.txt
 diff atteso.txt risultato.txt
 ```
 
