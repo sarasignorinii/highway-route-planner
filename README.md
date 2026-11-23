@@ -1,8 +1,31 @@
+<a id="top"></a>
+
+<div align="center">
+
 # highway-route-planner
 
-Prova finale di Algoritmi e Strutture Dati, anno accademico 2022–2023.
+*Pianifica il percorso con meno tappe lungo un'autostrada di stazioni di ricarica.*
+
+![Linguaggio: C](https://img.shields.io/badge/linguaggio-C-0080ff?style=flat)
+![Standard: gnu11](https://img.shields.io/badge/standard-gnu11-0080ff?style=flat)
+![Build: make](https://img.shields.io/badge/build-make-0080ff?style=flat)
+![Licenza: MIT](https://img.shields.io/badge/licenza-MIT-green?style=flat)
+
+</div>
+
+Prova finale di Algoritmi e Principi dell'Informatica, anno accademico 2022–2023.
 C standard, un unico file, nessuna libreria esterna.
 Specifica completa in [`specifica.pdf`](specifica.pdf).
+
+## Indice
+
+- [Il problema](#il-problema)
+- [Comandi](#comandi)
+- [Scelte implementative](#scelte-implementative)
+- [Verifica in locale](#verifica-in-locale)
+- [Costi](#costi)
+
+---
 
 ## Il problema
 
@@ -101,6 +124,10 @@ n = stazioni sull'autostrada, k = stazioni fra partenza e arrivo, m ≤ 512 auto
 | `demolisci-stazione` | O(log n) |
 | `aggiungi-auto`, `rottama-auto` | O(log n + m) |
 | `pianifica-percorso` | O(k), più O(n) per rigenerare la sintesi dopo una modifica alle stazioni |
+
+---
+
+[Torna su](#top)
 
 La sintesi si rigenera per intero dopo ogni aggiunta o demolizione di una
 stazione: renderla incrementale conviene solo se le modifiche alle stazioni si
