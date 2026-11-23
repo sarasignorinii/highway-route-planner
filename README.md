@@ -14,12 +14,23 @@ che modificano stazioni e veicoli, e per ogni richiesta pianifica il percorso co
 il minor numero di tappe. A parità di tappe vince il percorso che predilige le
 stazioni più vicine all'inizio dell'autostrada.
 
-Compila senza warning con le stesse opzioni usate dal verificatore ufficiale:
+Compila senza warning con le stesse opzioni usate dal verificatore ufficiale.
+
+Con il `Makefile`:
+
+```sh
+make
+./highway < input.txt > output.txt
+```
+
+Oppure direttamente con gcc:
 
 ```sh
 gcc -Wall -Werror -std=gnu11 -O2 -lm highway.c -o highway
 ./highway < input.txt > output.txt
 ```
+
+Per cancellare l'eseguibile: `make clean`.
 
 ## Comandi
 
