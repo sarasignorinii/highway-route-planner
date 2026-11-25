@@ -12,8 +12,8 @@
 </div>
 
 Prova finale di Algoritmi e Strutture Dati, anno accademico 2022–2023.
-C, un unico file, nessuna libreria esterna.
-Specifica completa in [`specifica.pdf`](specifica.pdf).
+Il programma è scritto in C, in un unico file, senza librerie esterne.
+La specifica completa è in [`specifica.pdf`](specifica.pdf).
 
 ## Indice
 
@@ -28,17 +28,13 @@ Specifica completa in [`specifica.pdf`](specifica.pdf).
 
 ## Il problema
 
-Un'autostrada è una sequenza di stazioni di servizio, ognuna identificata dalla
-distanza dall'inizio e dotata di al più 512 veicoli elettrici a noleggio: da una
-stazione si raggiungono tutte quelle che distano non più dell'autonomia del
-veicolo noleggiato. Il programma legge da standard input una sequenza di comandi
-che modificano stazioni e veicoli, e per ogni richiesta pianifica il percorso con
-il minor numero di tappe. A parità di tappe vince il percorso che predilige le
-stazioni più vicine all'inizio dell'autostrada.
+Un'autostrada è una sequenza di stazioni di servizio. Ogni stazione è identificata dalla distanza dall'inizio e offre al più 512 veicoli elettrici a noleggio. Da una stazione si raggiungono tutte quelle che distano non più dell'autonomia del veicolo noleggiato.
+
+Il programma legge da standard input una sequenza di comandi che modificano stazioni e veicoli. A ogni richiesta di percorso risponde con quello che ha il minor numero di tappe. A parità di tappe sceglie il percorso che passa per le stazioni più vicine all'inizio dell'autostrada.
 
 ## Compilazione
 
-Compila senza warning con le stesse opzioni usate dal verificatore ufficiale.
+Il codice compila senza warning con le stesse opzioni del verificatore ufficiale.
 
 Con il `Makefile`:
 
@@ -47,14 +43,14 @@ make
 ./highway < input.txt > output.txt
 ```
 
-Oppure direttamente con gcc:
+Direttamente con gcc:
 
 ```sh
 gcc -Wall -Werror -std=gnu11 -O2 -lm highway.c -o highway
 ./highway < input.txt > output.txt
 ```
 
-Per cancellare l'eseguibile: `make clean`.
+Per eliminare l'eseguibile: `make clean`.
 
 ## Comandi
 
@@ -66,39 +62,21 @@ Per cancellare l'eseguibile: `make clean`.
 | `rottama-auto <distanza> <autonomia>` | `rottamata` / `non rottamata` |
 | `pianifica-percorso <partenza> <arrivo>` | le tappe separate da spazi, oppure `nessun percorso` |
 
-Con quattro stazioni a distanza 20 (autonomie 5, 10, 15, 25), 30 (40), 45 (30) e
-50 (20, 25), `pianifica-percorso 50 20` risponde `50 30 20`: il percorso
-`50 45 20` ha lo stesso numero di tappe, ma 30 è più vicina all'inizio
-dell'autostrada di 45.
+**Esempio.** Date le stazioni a distanza 20 (autonomie 5, 10, 15, 25), 30 (40), 45 (30) e 50 (20, 25), il comando `pianifica-percorso 50 20` risponde `50 30 20`. Anche `50 45 20` ha tre tappe, ma 30 è più vicina all'inizio dell'autostrada di 45.
 
 ## Scelte implementative
 
-**Stazioni: albero AVL** ordinato per distanza. Ricerca, inserimento e
-demolizione in O(log n), memoria proporzionale alle sole stazioni esistenti.
+**Stazioni: albero AVL** ordinato per distanza. Ricerca, inserimento e demolizione costano O(log n). La memoria è proporzionale alle sole stazioni esistenti.
 
-**Veicoli: vettore ordinato in modo decrescente**, allocato su misura invece che
-con capacità fissa 512. L'autonomia massima, l'unico dato che serve a
-pianificare, è sempre il primo elemento; la rottamazione usa la ricerca binaria.
+**Veicoli: vettore ordinato in modo decrescente**, allocato su misura invece che con capacità fissa 512. L'autonomia massima, l'unico dato necessario a pianificare, è sempre il primo elemento. La rottamazione usa la ricerca binaria.
 
-**Sintesi dell'autostrada.** Pianificare richiede di scorrere le stazioni in
-ordine, e sull'albero questo significa una visita con molti salti in memoria. Il
-programma mantiene perciò un vettore contiguo di coppie (distanza, autonomia
-massima), rigenerato solo quando l'insieme delle stazioni cambia: aggiungere o
-rottamare un'auto aggiorna la singola voce.
+**Sintesi dell'autostrada.** Pianificare richiede di scorrere le stazioni in ordine, e la visita dell'albero comporta molti salti in memoria. Il programma mantiene quindi un vettore contiguo di coppie (distanza, autonomia massima). Lo rigenera solo quando cambia l'insieme delle stazioni; aggiungere o rottamare un'auto aggiorna la singola voce.
 
-**Percorso: visita in ampiezza a fasce.** Da una stazione si raggiunge sempre un
-intervallo contiguo di stazioni successive, quindi quelle raggiungibili con L
-spostamenti formano un blocco di cui basta ricordare l'ultimo indice: la visita
-costa O(k) sul vettore contiguo, senza allocazioni né code esplicite. Il percorso
-si ricostruisce a ritroso dall'arrivo scegliendo, fra i predecessori validi della
-fascia precedente, il primo se si viaggia in avanti e l'ultimo se si torna
-indietro — in entrambi i casi la stazione più vicina all'inizio dell'autostrada,
-cioè la regola di spareggio. Numerando le tappe nel verso di marcia, i due sensi
-di percorrenza condividono lo stesso codice.
+**Percorso: visita in ampiezza a fasce.** Da una stazione si raggiunge sempre un intervallo contiguo di stazioni successive. Le stazioni raggiungibili con L spostamenti formano quindi un blocco, di cui basta ricordare l'ultimo indice. La visita costa O(k) sul vettore contiguo, senza allocazioni né code esplicite.
 
-**I/O bufferizzato.** I file di prova contengono milioni di token: leggerli con
-`scanf` costerebbe più dell'algoritmo. Due buffer da 64 KB e un parser di interi
-scritto a mano.
+Il percorso si ricostruisce a ritroso dall'arrivo. Tra i predecessori validi della fascia precedente si sceglie il primo se si viaggia in avanti, l'ultimo se si torna indietro. In entrambi i casi si ottiene la stazione più vicina all'inizio dell'autostrada, come richiede la regola di spareggio. Numerando le tappe nel verso di marcia, i due sensi di percorrenza condividono lo stesso codice.
+
+**I/O bufferizzato.** I file di prova contengono milioni di token, e leggerli con `scanf` costerebbe più dell'algoritmo. Il programma usa due buffer da 64 KB e un parser di interi scritto a mano.
 
 ## Verifica in locale
 
@@ -109,11 +87,9 @@ Per confrontare l'output del programma con quello atteso di un caso di test:
 diff atteso.txt risultato.txt
 ```
 
-`diff` non stampa nulla se i due file sono identici. Durante lo sviluppo il
-programma è stato anche controllato con AddressSanitizer (`gcc -fsanitize=address`)
-e con Valgrind Memcheck per escludere accessi fuori dai limiti e perdite di
-memoria; i due strumenti vanno usati in compilazioni separate, perché sono
-incompatibili fra loro.
+Se i due file sono identici, `diff` non stampa nulla.
+
+Durante lo sviluppo il programma è stato controllato con AddressSanitizer (`gcc -fsanitize=address`) e con Valgrind Memcheck, per escludere accessi fuori dai limiti e perdite di memoria. I due strumenti sono incompatibili fra loro e richiedono compilazioni separate.
 
 ## Costi
 
@@ -126,9 +102,7 @@ n = stazioni sull'autostrada, k = stazioni fra partenza e arrivo, m ≤ 512 auto
 | `aggiungi-auto`, `rottama-auto` | O(log n + m) |
 | `pianifica-percorso` | O(k), più O(n) per rigenerare la sintesi dopo una modifica alle stazioni |
 
-La sintesi si rigenera per intero dopo ogni aggiunta o demolizione di una
-stazione: renderla incrementale conviene solo se le modifiche alle stazioni si
-alternano fittamente alle pianificazioni.
+La sintesi si rigenera per intero dopo ogni aggiunta o demolizione di una stazione. Renderla incrementale conviene solo se le modifiche alle stazioni si alternano fittamente alle pianificazioni.
 
 ---
 
